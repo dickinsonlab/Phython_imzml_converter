@@ -1,0 +1,16 @@
+from pyimzml.ImzMLParser import ImzMLParser
+import numpy as np
+from scipy.io import savemat
+
+imzml_file = r"Path to imzml file"
+p= ImzMLParser(imzml_file)
+
+peaklist = []
+coords = []
+for i, (x, y, z) in enumerate(p.coordinates):
+mz, intensity = p.getspectrum(i)
+peaklist.append(np.column_stack((mz, intensity)))
+coords.append([int(x),int(y)])
+coords = np.array(coords)
+savemat(r"Path to where you want the file saved", {"peaklist":peaklist, "coords":coords})
+print("Total spectra:", len(p.coordinates))
